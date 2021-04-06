@@ -2,10 +2,9 @@ import torch.nn as nn
 
 
 class MyBertModel(nn.Module):
-    def __init__(self, bert_model, device, n_classes=30, hidden_dim=768, dropout=.2):
+    def __init__(self, bert_model, device, n_classes=1, hidden_dim=768):
         super(MyBertModel, self).__init__()
         self.bert_model = bert_model.to(device)
-        self.dropout = nn.Dropout(dropout)
         self.fc1 = nn.Linear(hidden_dim, n_classes)
         self.sigmoid = nn.Sigmoid()
 

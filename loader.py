@@ -1,11 +1,12 @@
 from .bert_dataset import BertDatset
 from torch.utils.data import DataLoader
 
-def get_dataloader(df, tokenizer, label_column='category_1_le', text_columns=['text'], batch_size=4):
+def get_dataloader(df, tokenizer, label_column='category_1_le', text_columns=['text'],
+                   batch_size=4, max_seq_len=200):
 
     ds = BertDatset(df=df,
                   tokenizer=tokenizer,
-                  max_seq_len=512,
+                  max_seq_len=max_seq_len,
                   label_column=label_column,
                   text_columns=text_columns,
                   do_lower_case=False)
