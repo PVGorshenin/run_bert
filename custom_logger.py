@@ -1,7 +1,7 @@
 import numpy as np
 import os
 import torch
-from .common_ import to_numpy
+from .torch_utils import to_numpy
 from datetime import datetime
 
 
