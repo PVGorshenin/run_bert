@@ -5,15 +5,11 @@ from .custom_logger import CustomLogger
 from tqdm import tqdm
 
 
-OUTDIR = "../data/result/"
-
-
 class BertPredictor(object):
 
-    def __init__(self, model, train_loader, criterion, optimizer, split_rand_state, metric, description, device,
+    def __init__(self, model, train_loader, optimizer, split_rand_state, metric, description, device,
                  val_loader=None, epochs_count=1, result_dir="./data/result/", num_labels=1):
         self.model = model
-        self.criterion = criterion
         self.device = device
         self.train_loader = train_loader
         self.val_loader = val_loader
@@ -64,10 +60,10 @@ class BertPredictor(object):
             with tqdm(total=batches_count) as progress_bar:
                 for batch in self.train_loader:
                     df_idx, batch_id, batch_att, batch_seg, batch_label = batch.values()
-                    logits = self.model(ids=batch_id.to(self.device),
-                                        token_type_ids=batch_seg.to(self.device),
-                                        attention_mask=batch_att.to(self.device))
-                    loss = self.criterion(logits.cpu(), batch_label.cpu().reshape(-1, 1))
+                    loss, logits = self.model(input_ids=batch_id.to(self.device),
+                                              token_type_ids=batch_seg.to(self.device),
+                                              attention_mask=batch_att.to(self.device),
+                                              labels=batch_label.to(self.device)).values()
                     epoch_loss += loss.item()
                     self.logger.accumulate_train_preds(logits, batch_label, df_idx)
 
@@ -91,9 +87,9 @@ class BertPredictor(object):
         with torch.no_grad():
             for batch in tqdm(self.val_loader):
                 df_idx, batch_id, batch_att, batch_seg, batch_label = batch.values()
-                logits = self.model(ids=batch_id.to(self.device),
+                logits = self.model(input_ids=batch_id.to(self.device),
                                     token_type_ids=batch_seg.to(self.device),
-                                    attention_mask=batch_att.to(self.device))
+                                    attention_mask=batch_att.to(self.device))[0]
                 self.logger.accumulate_val_preds(logits, batch_label, df_idx)
             self.logger.extend_metric_lst_by_epoch(is_train=False)
             self.logger.save_val_preds()

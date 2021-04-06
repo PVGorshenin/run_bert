@@ -6,8 +6,7 @@ from typing import Union, List
 class BertDatset(Dataset):
 
     def __init__(self, df: pd.DataFrame, tokenizer, max_seq_len: int=100,
-                 text_columns: List=['text'], label_column: str=None,
-                 do_lower_case: bool=True):
+                 text_columns: List=['text'], label_column: str=None):
         """
         :param text_columns: если text_columns list, to
         inputs = self.tokenizer.encode_plus(
@@ -23,7 +22,6 @@ class BertDatset(Dataset):
         self.label_column = label_column
         self.max_seq_len = max_seq_len
         self.text_columns = text_columns
-        self.do_lower_case = do_lower_case
 
     def __len__(self):
         return self.df.shape[0]
@@ -67,5 +65,5 @@ class BertDatset(Dataset):
                 'ids': torch.tensor(ids, dtype=torch.long),
                 'mask': torch.tensor(mask, dtype=torch.long),
                 'token_type_ids': torch.tensor(token_type_ids, dtype=torch.long),
-                'label': torch.tensor(label, dtype=torch.float),
+                'label': torch.tensor(label, dtype=torch.long),
             }
