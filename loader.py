@@ -1,8 +1,8 @@
 from .bert_dataset import BertDatset
 from torch.utils.data import DataLoader
 
-def get_dataloader(df, tokenizer, label_column='category_1_le', text_columns=['text'],
-                   batch_size=4, max_seq_len=200):
+def get_dataloader(df, tokenizer, label_column=None, text_columns=['text'],
+                   batch_size=4, max_seq_len=200, shuffle=False):
 
     ds = BertDatset(df=df,
                   tokenizer=tokenizer,
@@ -13,6 +13,6 @@ def get_dataloader(df, tokenizer, label_column='category_1_le', text_columns=['t
 
     loader = DataLoader(ds,
                       batch_size=batch_size,
-                      shuffle=True)
+                      shuffle=shuffle)
     loader.num = df.shape[0]
     return loader

@@ -6,7 +6,7 @@ from typing import Union, List
 class BertDatset(Dataset):
 
     def __init__(self, df: pd.DataFrame, tokenizer, max_seq_len: int=100,
-                 text_columns: Union[List, str]='text', label_column: str=None,
+                 text_columns: List=['text'], label_column: str=None,
                  do_lower_case: bool=True):
         """
         :param text_columns: если text_columns list, to
@@ -30,9 +30,9 @@ class BertDatset(Dataset):
 
     def _get_inputs(self, iloc):
         text = self.df[self.text_columns].iloc[iloc]
-        if isinstance(self.text_columns, str):
+        if len(self.text_columns)==1:
             inputs = self.tokenizer.encode_plus(
-                text=text,
+                text=text[0],
                 max_length=self.max_seq_len,
                 pad_to_max_length=True,
                 truncation=True
