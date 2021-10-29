@@ -1,5 +1,3 @@
-
-
 def increase_head_lr(model, lr, increase_koeff):
     params = list(model.named_parameters())
 
