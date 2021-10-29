@@ -3,6 +3,7 @@ import torch
 from torch.utils.data import Dataset
 from typing import Union, List
 
+
 class BertDatset(Dataset):
 
     def __init__(self, df: pd.DataFrame, tokenizer, max_seq_len: int=100,
@@ -65,5 +66,5 @@ class BertDatset(Dataset):
                 'ids': torch.tensor(ids, dtype=torch.long),
                 'mask': torch.tensor(mask, dtype=torch.long),
                 'token_type_ids': torch.tensor(token_type_ids, dtype=torch.long),
-                'label': torch.tensor(label, dtype=torch.long),
+                'label': torch.tensor(label, dtype=torch.float32),
             }
