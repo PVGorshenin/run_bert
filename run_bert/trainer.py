@@ -63,7 +63,8 @@ class BertPredictor(object):
                     loss, logits = self.model(input_ids=batch_id.to(self.device),
                                               token_type_ids=batch_seg.to(self.device),
                                               attention_mask=batch_att.to(self.device),
-                                              labels=batch_label.to(self.device)).values()
+                                              labels=batch_label.to(self.device))
+
                     epoch_loss += loss.item()
                     self.logger.accumulate_train_preds(logits, batch_label, df_idx)
 
